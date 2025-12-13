@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-cream-50: #fffbf5;
+  --color-cream-100: #fef3e2;
+  --color-orange-500: #f97316;
+  --color-red-500: #ef4444;
+}
+
+body {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-playfair {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+}
+
+@layer components {
+  .recipe-card {
+    @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .recipe-card-image {
+    @apply w-full h-56 object-cover;
+  }
+
+  .recipe-card-content {
+    @apply p-6;
+  }
+
+  .category-badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+
+  .category-badge-breakfast {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .category-badge-lunch {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .category-badge-dinner {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .category-badge-desserts {
+    @apply bg-pink-100 text-pink-800;
+  }
+
+  .btn-primary {
+    @apply bg-orange-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-orange-600 border-2 border-orange-500 px-6 py-2 rounded-lg font-semibold hover:bg-orange-50 transition-colors;
+  }
+
+  .filter-button {
+    @apply px-6 py-2 rounded-full font-medium transition-all duration-200;
+  }
+
+  .filter-button-active {
+    @apply bg-orange-500 text-white shadow-md;
+  }
+
+  .filter-button-inactive {
+    @apply bg-white text-gray-700 hover:bg-gray-100 border border-gray-200;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fef3e2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Image loading effect */
+img {
+  @apply transition-opacity duration-300;
+}
+
+img[loading] {
+  @apply opacity-0;
+}
+
+img.loaded {
+  @apply opacity-100;
+}
