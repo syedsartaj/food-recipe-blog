@@ -125,7 +125,7 @@ export async function getFeaturedRecipes(limit: number = 5) {
   return recipes
 }
 
-export async function getRecipesByCategory(category: string) {
+export async function getRecipesByCategory(category: Recipe['category']) {
   const db = await getDatabase()
   const recipes = await db
     .collection<Recipe>('recipes')
