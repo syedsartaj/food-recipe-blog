@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 const recipeData: { [key: string]: any } = {
@@ -137,10 +135,7 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
   const recipe = recipeData[params.slug] || recipeData['creamy-tuscan-chicken'];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-grow">
+    <>
         {/* Hero Section */}
         <section className="relative h-96 md:h-[500px]">
           <img
@@ -291,9 +286,6 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
             </Link>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+    </>
   );
 }

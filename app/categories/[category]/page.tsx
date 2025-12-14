@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 const categoryInfo: { [key: string]: any } = {
@@ -250,10 +248,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
   const recipes = recipesByCategory[params.category] || recipesByCategory['breakfast'];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-grow">
+    <>
         {/* Hero Section */}
         <section className={`bg-gradient-to-r ${category.color} py-20`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -407,9 +402,6 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </div>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+    </>
   );
 }

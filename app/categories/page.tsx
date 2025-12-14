@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 
 const categories = [
@@ -55,10 +53,7 @@ const categories = [
 
 export default function CategoriesPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-
-      <main className="flex-grow">
+    <>
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-orange-50 to-red-50 py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -193,9 +188,6 @@ export default function CategoriesPage() {
             </div>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+    </>
   );
 }
