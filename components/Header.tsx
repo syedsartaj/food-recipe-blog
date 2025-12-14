@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { ChefHat, Search, Menu, X } from 'lucide-react'
 
 export default function Header() {
@@ -12,30 +13,30 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <ChefHat className="w-8 h-8 text-orange-500" />
             <span className="text-2xl font-playfair font-bold text-gray-900">
               SAVORY
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+            <Link href="/" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
               Home
-            </a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+            </Link>
+            <Link href="/blog" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
               Recipes
-            </a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+            </Link>
+            <Link href="/categories" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
               Categories
-            </a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+            </Link>
+            <Link href="/about" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
               About
-            </a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+            </Link>
+            <Link href="/contact" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Search Bar */}
@@ -65,21 +66,21 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col gap-4 mb-4">
-              <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+              <Link href="/" className="text-gray-700 hover:text-orange-500 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Home
-              </a>
-              <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+              </Link>
+              <Link href="/blog" className="text-gray-700 hover:text-orange-500 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Recipes
-              </a>
-              <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+              </Link>
+              <Link href="/categories" className="text-gray-700 hover:text-orange-500 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Categories
-              </a>
-              <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+              </Link>
+              <Link href="/about" className="text-gray-700 hover:text-orange-500 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 About
-              </a>
-              <a href="#" className="text-gray-700 hover:text-orange-500 font-medium transition-colors">
+              </Link>
+              <Link href="/contact" className="text-gray-700 hover:text-orange-500 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Contact
-              </a>
+              </Link>
             </nav>
             <div className="relative">
               <input
