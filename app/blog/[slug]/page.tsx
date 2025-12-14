@@ -269,7 +269,7 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {Object.entries(recipe.nutrition).map(([key, value]) => (
                 <div key={key} className="bg-white rounded-xl p-6 text-center shadow-md">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">{value}</div>
+                  <div className="text-3xl font-bold text-orange-500 mb-2">{String(value)}</div>
                   <div className="text-sm text-gray-600 uppercase">{key}</div>
                 </div>
               ))}
