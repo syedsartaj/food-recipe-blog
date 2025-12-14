@@ -5,8 +5,23 @@ import RecipeCard from '@/components/RecipeCard'
 import CategoryFilter from '@/components/CategoryFilter'
 import { ChefHat, Sparkles } from 'lucide-react'
 
+type Difficulty = 'Easy' | 'Medium' | 'Hard'
+
+interface Recipe {
+  id: string
+  title: string
+  description: string
+  category: string
+  image: string
+  cookTime: string
+  difficulty: Difficulty
+  rating: number
+  servings: number
+  author: string
+}
+
 // Sample recipe data
-const recipes = [
+const recipes: Recipe[] = [
   {
     id: '1',
     title: 'Fluffy Buttermilk Pancakes',
