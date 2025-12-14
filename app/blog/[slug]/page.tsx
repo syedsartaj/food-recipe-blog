@@ -1,138 +1,35 @@
 import Link from 'next/link';
+import { getSmakslyBlogBySlug, formatBlogDate, estimateReadTime } from '@/lib/smaksly-blogs';
+import { notFound } from 'next/navigation';
 
-const recipeData: { [key: string]: any } = {
-  'creamy-tuscan-chicken': {
-    title: 'Creamy Tuscan Chicken',
-    description: 'Tender chicken in a luscious sun-dried tomato cream sauce with spinach',
-    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=1200&q=80',
-    prepTime: '15 min',
-    cookTime: '25 min',
-    servings: 4,
-    category: 'Dinner',
-    difficulty: 'Medium',
-    ingredients: [
-      '4 boneless, skinless chicken breasts',
-      '2 tablespoons olive oil',
-      '3 cloves garlic, minced',
-      '1 cup sun-dried tomatoes, chopped',
-      '1 cup heavy cream',
-      '1/2 cup chicken broth',
-      '2 cups fresh spinach',
-      '1/2 cup Parmesan cheese, grated',
-      '1 teaspoon Italian seasoning',
-      'Salt and pepper to taste',
-      'Fresh basil for garnish'
-    ],
-    instructions: [
-      'Season chicken breasts with salt, pepper, and Italian seasoning.',
-      'Heat olive oil in a large skillet over medium-high heat. Add chicken and cook 6-7 minutes per side until golden and cooked through. Remove and set aside.',
-      'In the same skillet, add garlic and cook for 1 minute until fragrant.',
-      'Add sun-dried tomatoes and cook for 2 minutes.',
-      'Pour in heavy cream and chicken broth. Bring to a simmer.',
-      'Stir in Parmesan cheese until melted and smooth.',
-      'Add spinach and cook until wilted, about 2 minutes.',
-      'Return chicken to the skillet and spoon sauce over the top.',
-      'Simmer for 3-4 minutes to heat through.',
-      'Garnish with fresh basil and serve hot over pasta or rice.'
-    ],
-    nutrition: {
-      calories: 485,
-      protein: '42g',
-      carbs: '12g',
-      fat: '31g',
-      fiber: '2g',
-      sodium: '680mg'
-    }
-  },
-  'fluffy-blueberry-pancakes': {
-    title: 'Fluffy Blueberry Pancakes',
-    description: 'Light, airy pancakes bursting with fresh blueberries',
-    image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1200&q=80',
-    prepTime: '10 min',
-    cookTime: '15 min',
-    servings: 4,
-    category: 'Breakfast',
-    difficulty: 'Easy',
-    ingredients: [
-      '2 cups all-purpose flour',
-      '2 tablespoons sugar',
-      '2 teaspoons baking powder',
-      '1/2 teaspoon salt',
-      '2 large eggs',
-      '1 3/4 cups milk',
-      '1/4 cup melted butter',
-      '1 teaspoon vanilla extract',
-      '1 1/2 cups fresh blueberries',
-      'Maple syrup for serving',
-      'Butter for cooking'
-    ],
-    instructions: [
-      'In a large bowl, whisk together flour, sugar, baking powder, and salt.',
-      'In a separate bowl, beat eggs, then add milk, melted butter, and vanilla extract.',
-      'Pour wet ingredients into dry ingredients and stir until just combined. Don\'t overmix - lumps are okay!',
-      'Gently fold in blueberries.',
-      'Heat a griddle or large skillet over medium heat and brush with butter.',
-      'Pour 1/4 cup batter for each pancake onto the griddle.',
-      'Cook until bubbles form on the surface and edges look set, about 2-3 minutes.',
-      'Flip and cook for another 2 minutes until golden brown.',
-      'Repeat with remaining batter, adding more butter as needed.',
-      'Serve hot with maple syrup and extra blueberries.'
-    ],
-    nutrition: {
-      calories: 395,
-      protein: '11g',
-      carbs: '58g',
-      fat: '14g',
-      fiber: '3g',
-      sodium: '520mg'
-    }
-  },
-  'classic-chocolate-chip-cookies': {
-    title: 'Classic Chocolate Chip Cookies',
-    description: 'Perfectly chewy cookies with melty chocolate chips',
-    image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1200&q=80',
-    prepTime: '15 min',
-    cookTime: '12 min',
-    servings: 24,
-    category: 'Desserts',
-    difficulty: 'Easy',
-    ingredients: [
-      '2 1/4 cups all-purpose flour',
-      '1 teaspoon baking soda',
-      '1 teaspoon salt',
-      '1 cup butter, softened',
-      '3/4 cup granulated sugar',
-      '3/4 cup brown sugar, packed',
-      '2 large eggs',
-      '2 teaspoons vanilla extract',
-      '2 cups chocolate chips',
-      '1 cup chopped walnuts (optional)'
-    ],
-    instructions: [
-      'Preheat oven to 375°F (190°C).',
-      'In a bowl, combine flour, baking soda, and salt. Set aside.',
-      'In a large bowl, beat softened butter with both sugars until creamy.',
-      'Add eggs and vanilla extract to the butter mixture and beat well.',
-      'Gradually stir in the flour mixture until just combined.',
-      'Fold in chocolate chips and walnuts if using.',
-      'Drop rounded tablespoons of dough onto ungreased cookie sheets, spacing them 2 inches apart.',
-      'Bake for 9-12 minutes or until golden brown around the edges.',
-      'Cool on baking sheet for 2 minutes before removing to a wire rack.',
-      'Store in an airtight container for up to 1 week.'
-    ],
-    nutrition: {
-      calories: 180,
-      protein: '2g',
-      carbs: '24g',
-      fat: '9g',
-      fiber: '1g',
-      sodium: '140mg'
-    }
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function RecipePage({ params }: { params: { slug: string } }) {
+  const blog = await getSmakslyBlogBySlug(params.slug);
+
+  if (!blog) {
+    notFound();
   }
-};
 
-export default function RecipePage({ params }: { params: { slug: string } }) {
-  const recipe = recipeData[params.slug] || recipeData['creamy-tuscan-chicken'];
+  // Parse blog body for ingredients and instructions (if structured)
+  // For now, we'll display the blog body as the main content
+  const recipe = {
+    title: blog.title,
+    description: blog.body
+      .replace(/<[^>]*>/g, ' ')
+      .split('\n')
+      .filter(line => line.trim().length > 0)[0]
+      ?.slice(0, 200) || '',
+    image: blog.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80',
+    prepTime: '10 min',
+    cookTime: estimateReadTime(blog.body),
+    servings: 4,
+    category: blog.category || 'Recipe',
+    difficulty: 'Medium',
+    publishDate: formatBlogDate(blog.publish_date),
+    body: blog.body
+  };
 
   return (
     <>
@@ -208,67 +105,16 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
           </div>
         </section>
 
-        {/* Ingredients and Instructions */}
+        {/* Blog Content */}
         <section className="py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Ingredients */}
-              <div className="lg:col-span-1">
-                <div className="bg-orange-50 rounded-2xl p-8 sticky top-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <svg className="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    Ingredients
-                  </h2>
-                  <ul className="space-y-3">
-                    {recipe.ingredients.map((ingredient: string, index: number) => (
-                      <li key={index} className="flex items-start">
-                        <svg className="w-5 h-5 text-orange-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <span className="text-gray-700">{ingredient}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* Instructions */}
-              <div className="lg:col-span-2">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <svg className="w-6 h-6 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  Instructions
-                </h2>
-                <ol className="space-y-6">
-                  {recipe.instructions.map((instruction: string, index: number) => (
-                    <li key={index} className="flex">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                        {index + 1}
-                      </div>
-                      <p className="text-gray-700 pt-1.5">{instruction}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+            <div className="mb-6 text-gray-500 text-sm">
+              Published on {recipe.publishDate}
             </div>
-          </div>
-        </section>
-
-        {/* Nutrition Info */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Nutrition Information (per serving)</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {Object.entries(recipe.nutrition).map(([key, value]) => (
-                <div key={key} className="bg-white rounded-xl p-6 text-center shadow-md">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">{String(value)}</div>
-                  <div className="text-sm text-gray-600 uppercase">{key}</div>
-                </div>
-              ))}
-            </div>
+            <div
+              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-orange-500 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700"
+              dangerouslySetInnerHTML={{ __html: recipe.body }}
+            />
           </div>
         </section>
 
